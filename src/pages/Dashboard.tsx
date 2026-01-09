@@ -1,33 +1,41 @@
 import { useState } from "react";
 import { TaskList } from "@/types";
-import { mockTaskLists } from "@/data/mockData";
+import { useLists } from "@/hooks/useLists";
 import TaskListCard from "@/components/TaskListCard";
 import TaskListDetail from "@/components/TaskListDetail";
 import { Button } from "@/components/ui/button";
-import { CheckSquare, Plus, LogOut } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { CheckSquare, Plus, LogOut, Loader2 } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
 
 const Dashboard = () => {
-  const navigate = useNavigate();
-  const [lists, setLists] = useState<TaskList[]>(mockTaskLists);
+  const { logout } = useAuth();
+  const { data: lists = [], isLoading, error } = useLists();
   const [selectedList, setSelectedList] = useState<TaskList | null>(null);
-
-  const handleUpdateList = (updatedList: TaskList) => {
-    setLists((prev) =>
-      prev.map((list) => (list.id === updatedList.id ? updatedList : list))
-    );
-    setSelectedList(updatedList);
-  };
-
-  const handleLogout = () => {
-    navigate("/");
-  };
 
   const totalTasks = lists.reduce((acc, list) => acc + list.tasks.length, 0);
   const completedTasks = lists.reduce(
     (acc, list) => acc + list.tasks.filter((t) => t.completed).length,
     0
   );
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-destructive mb-4">Erro ao carregar listas</p>
+          <Button onClick={() => window.location.reload()}>Tentar novamente</Button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -53,7 +61,7 @@ const Dashboard = () => {
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={handleLogout}
+                onClick={logout}
                 className="text-muted-foreground hover:text-foreground"
               >
                 <LogOut className="w-4 h-4 mr-2" />
@@ -70,7 +78,6 @@ const Dashboard = () => {
           <TaskListDetail
             list={selectedList}
             onBack={() => setSelectedList(null)}
-            onUpdateList={handleUpdateList}
           />
         ) : (
           <div className="animate-fade-in">

@@ -3,18 +3,24 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CheckSquare, Mail, Lock, ArrowRight } from "lucide-react";
+import { CheckSquare, Mail, Lock, ArrowRight, User } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 
-const Login = () => {
-  const { login, isLoading } = useAuth();
+const Signup = () => {
+  const { signup, isLoading } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (password !== confirmPassword) {
+      return;
+    }
+    
     try {
-      await login(email, password);
+      await signup(email, password);
     } catch {
       // Error is handled in AuthContext
     }
@@ -32,15 +38,15 @@ const Login = () => {
             <span className="text-3xl font-bold">TaskFlow</span>
           </div>
           <h1 className="text-4xl font-bold mb-4 leading-tight">
-            Organize suas tarefas de forma simples e eficiente
+            Comece a organizar suas tarefas hoje
           </h1>
           <p className="text-lg opacity-90">
-            Crie listas, compartilhe com sua equipe e acompanhe o progresso de todos os seus projetos.
+            Crie sua conta gratuita e transforme a forma como você gerencia seus projetos.
           </p>
         </div>
       </div>
 
-      {/* Right side - Login Form */}
+      {/* Right side - Signup Form */}
       <div className="w-full lg:w-1/2 flex items-center justify-center p-8">
         <div className="w-full max-w-md animate-fade-in-up">
           {/* Mobile logo */}
@@ -53,10 +59,10 @@ const Login = () => {
 
           <div className="text-center lg:text-left mb-8">
             <h2 className="text-2xl font-bold text-foreground mb-2">
-              Bem-vindo de volta!
+              Criar conta
             </h2>
             <p className="text-muted-foreground">
-              Entre na sua conta para continuar
+              Preencha os dados para começar
             </p>
           </div>
 
@@ -89,18 +95,29 @@ const Login = () => {
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-11 h-12 bg-secondary border-0 focus:ring-2 focus:ring-primary"
                   required
+                  minLength={6}
                 />
               </div>
             </div>
 
-            <div className="flex items-center justify-between text-sm">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input type="checkbox" className="rounded border-muted-foreground" />
-                <span className="text-muted-foreground">Lembrar de mim</span>
-              </label>
-              <a href="#" className="text-primary hover:underline font-medium">
-                Esqueceu a senha?
-              </a>
+            <div className="space-y-2">
+              <Label htmlFor="confirmPassword" className="text-foreground">Confirmar Senha</Label>
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  id="confirmPassword"
+                  type="password"
+                  placeholder="••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="pl-11 h-12 bg-secondary border-0 focus:ring-2 focus:ring-primary"
+                  required
+                  minLength={6}
+                />
+              </div>
+              {password !== confirmPassword && confirmPassword && (
+                <p className="text-sm text-destructive">As senhas não coincidem</p>
+              )}
             </div>
 
             <Button
@@ -108,16 +125,16 @@ const Login = () => {
               variant="gradient"
               size="lg"
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || password !== confirmPassword}
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
                   <span className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
-                  Entrando...
+                  Criando conta...
                 </span>
               ) : (
                 <span className="flex items-center gap-2">
-                  Entrar
+                  Criar conta
                   <ArrowRight className="w-4 h-4" />
                 </span>
               )}
@@ -125,9 +142,9 @@ const Login = () => {
           </form>
 
           <p className="text-center mt-8 text-muted-foreground">
-            Não tem uma conta?{" "}
-            <Link to="/signup" className="text-primary hover:underline font-medium">
-              Criar conta
+            Já tem uma conta?{" "}
+            <Link to="/login" className="text-primary hover:underline font-medium">
+              Fazer login
             </Link>
           </p>
         </div>
@@ -136,4 +153,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;
