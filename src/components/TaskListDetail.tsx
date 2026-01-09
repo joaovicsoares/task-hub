@@ -4,49 +4,57 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TaskItem from "./TaskItem";
 import ShareDialog from "./ShareDialog";
-import { ArrowLeft, Share2, Plus, Users } from "lucide-react";
+import { ArrowLeft, Share2, Plus, Users, Loader2 } from "lucide-react";
+import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "@/hooks/useTasks";
+import { useShareList } from "@/hooks/useLists";
 
 interface TaskListDetailProps {
   list: TaskList;
   onBack: () => void;
-  onUpdateList: (updatedList: TaskList) => void;
 }
 
-const TaskListDetail = ({ list, onBack, onUpdateList }: TaskListDetailProps) => {
+const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [isShareOpen, setIsShareOpen] = useState(false);
 
+  const { data: tasks = [], isLoading } = useTasks(list.id);
+  const createTask = useCreateTask();
+  const updateTask = useUpdateTask(list.id);
+  const deleteTask = useDeleteTask(list.id);
+  const shareList = useShareList();
+
   const handleToggleTask = (taskId: string) => {
-    const updatedTasks = list.tasks.map((task) =>
-      task.id === taskId ? { ...task, completed: !task.completed } : task
-    );
-    onUpdateList({ ...list, tasks: updatedTasks });
+    const task = tasks.find((t) => t.id === taskId);
+    if (task) {
+      updateTask.mutate({ id: taskId, data: { completed: !task.completed } });
+    }
   };
 
   const handleAddTask = (e: React.FormEvent) => {
     e.preventDefault();
     if (!newTaskTitle.trim()) return;
 
-    const newTask: Task = {
-      id: `${list.id}-${Date.now()}`,
-      title: newTaskTitle.trim(),
-      completed: false,
-      createdAt: new Date(),
-    };
-
-    onUpdateList({ ...list, tasks: [...list.tasks, newTask] });
-    setNewTaskTitle("");
+    createTask.mutate(
+      { title: newTaskTitle.trim(), listId: list.id },
+      { onSuccess: () => setNewTaskTitle("") }
+    );
   };
 
   const handleShare = (email: string) => {
-    if (!list.sharedWith.includes(email)) {
-      onUpdateList({ ...list, sharedWith: [...list.sharedWith, email] });
-    }
+    shareList.mutate({ listId: list.id, email });
   };
 
-  const completedTasks = list.tasks.filter((t) => t.completed).length;
-  const pendingTasks = list.tasks.filter((t) => !t.completed);
-  const doneTasks = list.tasks.filter((t) => t.completed);
+  const completedTasks = tasks.filter((t) => t.completed).length;
+  const pendingTasks = tasks.filter((t) => !t.completed);
+  const doneTasks = tasks.filter((t) => t.completed);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-16">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
 
   return (
     <div className="animate-slide-in-right">
@@ -86,7 +94,7 @@ const TaskListDetail = ({ list, onBack, onUpdateList }: TaskListDetailProps) => 
 
         <div className="flex items-center gap-4 mt-4 ml-7">
           <span className="text-sm text-muted-foreground">
-            {completedTasks} de {list.tasks.length} concluídas
+            {completedTasks} de {tasks.length} concluídas
           </span>
           
           {list.sharedWith.length > 0 && (
@@ -108,10 +116,20 @@ const TaskListDetail = ({ list, onBack, onUpdateList }: TaskListDetailProps) => 
               onChange={(e) => setNewTaskTitle(e.target.value)}
               placeholder="Adicionar nova tarefa..."
               className="pl-11 h-12 bg-card border-border focus:ring-2 focus:ring-primary"
+              disabled={createTask.isPending}
             />
           </div>
-          <Button type="submit" variant="gradient" size="lg">
-            Adicionar
+          <Button 
+            type="submit" 
+            variant="gradient" 
+            size="lg"
+            disabled={createTask.isPending}
+          >
+            {createTask.isPending ? (
+              <Loader2 className="w-4 h-4 animate-spin" />
+            ) : (
+              "Adicionar"
+            )}
           </Button>
         </div>
       </form>
@@ -154,7 +172,7 @@ const TaskListDetail = ({ list, onBack, onUpdateList }: TaskListDetailProps) => 
           </div>
         )}
 
-        {list.tasks.length === 0 && (
+        {tasks.length === 0 && (
           <div className="text-center py-12">
             <p className="text-muted-foreground">
               Nenhuma tarefa ainda. Adicione a primeira!
