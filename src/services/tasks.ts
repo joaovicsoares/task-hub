@@ -8,8 +8,8 @@ interface CreateTaskData {
 }
 
 interface UpdateTaskData {
-  title?: string;
-  completed?: boolean;
+  titulo?: string;
+  concluida?: boolean;
 }
 
 export const tasksService = {

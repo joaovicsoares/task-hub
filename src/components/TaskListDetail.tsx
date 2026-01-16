@@ -26,7 +26,7 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const handleToggleTask = (taskId: string) => {
     const task = tasks.find((t) => t.id === taskId);
     if (task) {
-      updateTask.mutate({ id: taskId, data: { completed: !task.concluida } });
+      updateTask.mutate({ id: taskId, data: { concluida: !task.concluida } });
     }
   };
 
