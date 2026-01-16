@@ -2,11 +2,10 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { tasksService } from '@/services/tasks';
 import { toast } from 'sonner';
 
-export const useTasks = (listId: string) => {
+export const useTasks = () => {
   return useQuery({
-    queryKey: ['tasks', listId],
-    queryFn: () => tasksService.getByListId(listId),
-    enabled: !!listId,
+    queryKey: ['tasks'],
+    queryFn: () => tasksService.getAll(),
   });
 };
 
@@ -26,14 +25,14 @@ export const useCreateTask = () => {
   });
 };
 
-export const useUpdateTask = (listId: string) => {
+export const useUpdateTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: ({ id, data }: { id: string; data: { title?: string; completed?: boolean } }) =>
       tasksService.update(id, data),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks', listId] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
       queryClient.invalidateQueries({ queryKey: ['lists'] });
     },
     onError: (error: Error) => {
@@ -42,13 +41,13 @@ export const useUpdateTask = (listId: string) => {
   });
 };
 
-export const useDeleteTask = (listId: string) => {
+export const useDeleteTask = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: tasksService.delete,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['tasks', listId] });
+      queryClient.invalidateQueries({ queryKey: ['tasks'] });
       queryClient.invalidateQueries({ queryKey: ['lists'] });
       toast.success('Tarefa removida!');
     },
