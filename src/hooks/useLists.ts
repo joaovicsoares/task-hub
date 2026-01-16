@@ -37,7 +37,7 @@ export const useUpdateList = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: string; data: Partial<TaskList> }) =>
+    mutationFn: ({ id, data }: { id: string; data: { nome?: string } }) =>
       listsService.update(id, data),
     onSuccess: (_, { id }) => {
       queryClient.invalidateQueries({ queryKey: ['lists'] });

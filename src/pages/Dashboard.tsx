@@ -14,12 +14,6 @@ const Dashboard = () => {
   const [selectedList, setSelectedList] = useState<TaskList | null>(null);
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
-  const totalTasks = lists.reduce((acc, list) => acc + list.tasks.length, 0);
-  const completedTasks = lists.reduce(
-    (acc, list) => acc + list.tasks.filter((t) => t.completed).length,
-    0
-  );
-
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -54,10 +48,8 @@ const Dashboard = () => {
 
             <div className="flex items-center gap-4">
               <div className="hidden sm:block text-sm text-muted-foreground">
-                <span className="font-medium text-foreground">{completedTasks}</span>
-                <span> de </span>
-                <span className="font-medium text-foreground">{totalTasks}</span>
-                <span> tarefas concluídas</span>
+                <span className="font-medium text-foreground">{lists.length}</span>
+                <span> listas</span>
               </div>
               
               <Button
