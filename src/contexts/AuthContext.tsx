@@ -35,10 +35,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     setIsAuthenticated(authService.isAuthenticated());
   }, []);
 
-  const login = useCallback(async (email: string, password: string) => {
+  const login = useCallback(async (email: string, senha: string) => {
     setIsLoading(true);
     try {
-      await authService.login({ email, password });
+      await authService.login({ email, senha });
       setIsAuthenticated(true);
       toast.success('Login realizado com sucesso!');
       navigate('/dashboard');

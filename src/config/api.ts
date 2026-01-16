@@ -8,12 +8,12 @@ export const API_ENDPOINTS = {
   login: '/api/auth/login',
   
   // Lists
-  lists: '/lists',
-  listById: (id: string) => `/lists/${id}`,
+  lists: '/api/list',
+  listById: (id: string) => `/api/list/${id}`,
   
   // Tasks
-  tasks: '/tasks',
-  taskById: (id: string) => `/tasks/${id}`,
+  tasks: '/api/task',
+  taskById: (id: string) => `/api/task/${id}`,
   tasksByList: (listId: string) => `/lists/${listId}/tasks`,
   
   // Share
