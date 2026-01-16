@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   // Tasks
   tasks: '/api/task',
   taskById: (id: string) => `/api/task/${id}`,
+  taskByListId: (listId: string) => `/api/task/${listId}`,
   
   // Share
   shareList: '/api/sharelist',

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import TaskItem from "./TaskItem";
 import ShareDialog from "./ShareDialog";
 import { ArrowLeft, Share2, Plus, Loader2 } from "lucide-react";
-import { useTasks, useCreateTask, useUpdateTask } from "@/hooks/useTasks";
+import { useTasksByListId, useCreateTask, useUpdateTask } from "@/hooks/useTasks";
 import { useShareList } from "@/hooks/useLists";
 
 interface TaskListDetailProps {
@@ -17,8 +17,8 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [isShareOpen, setIsShareOpen] = useState(false);
 
-  const { data: allTasks = [], isLoading } = useTasks();
-  const tasks = allTasks.filter((t) => t.listId === String(list.id));
+  const { data: tasks = [], isLoading } = useTasksByListId(String(list.id));
+  //const tasks = allTasks.filter((t) => t.listId === String(list.id));
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
   const shareList = useShareList();
@@ -26,7 +26,7 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const handleToggleTask = (taskId: string) => {
     const task = tasks.find((t) => t.id === taskId);
     if (task) {
-      updateTask.mutate({ id: taskId, data: { completed: !task.completed } });
+      updateTask.mutate({ id: taskId, data: { completed: !task.concluida } });
     }
   };
 
@@ -44,9 +44,9 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
     shareList.mutate({ listId: String(list.id), email });
   };
 
-  const completedTasks = tasks.filter((t) => t.completed).length;
-  const pendingTasks = tasks.filter((t) => !t.completed);
-  const doneTasks = tasks.filter((t) => t.completed);
+  const completedTasks = tasks.filter((t) => t.concluida).length;
+  const pendingTasks = tasks.filter((t) => !t.concluida);
+  const doneTasks = tasks.filter((t) => t.concluida);
 
   if (isLoading) {
     return (

@@ -1,9 +1,8 @@
 export interface Task {
   id: string;
-  title: string;
-  completed: boolean;
-  listId: string;
-  createdAt: Date;
+  titulo: string;
+  concluida: boolean;
+  idLista: string;
 }
 
 export interface TaskList {
