@@ -13,7 +13,7 @@ interface SignupData {
 
 interface LoginData {
   email: string;
-  password: string;
+  senha: string;
 }
 
 export const authService = {
