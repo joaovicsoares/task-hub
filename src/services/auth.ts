@@ -8,6 +8,7 @@ interface AuthResponse {
 interface SignupData {
   email: string;
   password: string;
+  username: string;
 }
 
 interface LoginData {

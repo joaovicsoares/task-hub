@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 const Signup = () => {
   const { signup, isLoading } = useAuth();
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -20,7 +21,7 @@ const Signup = () => {
     }
     
     try {
-      await signup(email, password);
+      await signup(email, password, username);
     } catch {
       // Error is handled in AuthContext
     }
@@ -67,6 +68,22 @@ const Signup = () => {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
+            <div className="space-y-2">
+              <Label htmlFor="username" className="text-foreground">Nome de usuário</Label>
+              <div className="relative">
+                <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="seu_usuario"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                  className="pl-11 h-12 bg-secondary border-0 focus:ring-2 focus:ring-primary"
+                  required
+                />
+              </div>
+            </div>
+
             <div className="space-y-2">
               <Label htmlFor="email" className="text-foreground">Email</Label>
               <div className="relative">
