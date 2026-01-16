@@ -3,9 +3,9 @@ import { API_ENDPOINTS } from '@/config/api';
 import { TaskList } from '@/types';
 
 interface CreateListData {
-  title: string;
-  description?: string;
-  color: string;
+  nome: string;
+  //description?: string;
+  //color: string;
 }
 
 interface UpdateListData {

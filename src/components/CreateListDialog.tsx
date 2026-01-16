@@ -41,8 +41,8 @@ const CreateListDialog = ({ open, onOpenChange }: CreateListDialogProps) => {
 
     try {
       await createList.mutateAsync({
-        title: title.trim(),
-        color: selectedColor,
+        nome: title.trim(),
+        //color: selectedColor,
       });
       setTitle("");
       setSelectedColor(COLORS[0]);
