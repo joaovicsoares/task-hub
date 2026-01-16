@@ -3,6 +3,7 @@ import { TaskList } from "@/types";
 import { useLists } from "@/hooks/useLists";
 import TaskListCard from "@/components/TaskListCard";
 import TaskListDetail from "@/components/TaskListDetail";
+import CreateListDialog from "@/components/CreateListDialog";
 import { Button } from "@/components/ui/button";
 import { CheckSquare, Plus, LogOut, Loader2 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
@@ -11,6 +12,7 @@ const Dashboard = () => {
   const { logout } = useAuth();
   const { data: lists = [], isLoading, error } = useLists();
   const [selectedList, setSelectedList] = useState<TaskList | null>(null);
+  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
 
   const totalTasks = lists.reduce((acc, list) => acc + list.tasks.length, 0);
   const completedTasks = lists.reduce(
@@ -96,7 +98,11 @@ const Dashboard = () => {
               <h2 className="text-xl font-semibold text-foreground">
                 Suas Listas
               </h2>
-              <Button variant="gradient" className="flex items-center gap-2">
+              <Button 
+                variant="gradient" 
+                className="flex items-center gap-2"
+                onClick={() => setIsCreateDialogOpen(true)}
+              >
                 <Plus className="w-4 h-4" />
                 Nova Lista
               </Button>
@@ -128,7 +134,10 @@ const Dashboard = () => {
                 <p className="text-muted-foreground mb-6">
                   Crie sua primeira lista para começar a organizar suas tarefas.
                 </p>
-                <Button variant="gradient">
+                <Button 
+                  variant="gradient"
+                  onClick={() => setIsCreateDialogOpen(true)}
+                >
                   <Plus className="w-4 h-4 mr-2" />
                   Criar Primeira Lista
                 </Button>
@@ -137,6 +146,11 @@ const Dashboard = () => {
           </div>
         )}
       </main>
+
+      <CreateListDialog 
+        open={isCreateDialogOpen} 
+        onOpenChange={setIsCreateDialogOpen} 
+      />
     </div>
   );
 };
