@@ -2,12 +2,20 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { tasksService } from '@/services/tasks';
 import { toast } from 'sonner';
 
-export const useTasks = () => {
+// export const useTasks = () => {
+//   return useQuery({
+//     queryKey: ['tasks'],
+//     queryFn: () => tasksService.getAll(),
+//   });
+// };
+
+export const useTasksByListId = (listId: string) => {
   return useQuery({
-    queryKey: ['tasks'],
-    queryFn: () => tasksService.getAll(),
-  });
-};
+    queryKey: ["tasks", listId],
+    queryFn: () => tasksService.getByListId(listId),
+    enabled: !!listId,
+  })
+}
 
 export const useCreateTask = () => {
   const queryClient = useQueryClient();
