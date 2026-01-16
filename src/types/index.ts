@@ -7,13 +7,8 @@ export interface Task {
 }
 
 export interface TaskList {
-  id: string;
-  title: string;
-  description?: string;
-  color: string;
-  tasks: Task[];
-  createdAt: Date;
-  sharedWith: string[];
+  id: number;
+  nome: string;
 }
 
 export interface User {
