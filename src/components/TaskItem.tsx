@@ -4,11 +4,11 @@ import { cn } from "@/lib/utils";
 
 interface TaskItemProps {
   task: Task;
-  listColor: string;
+  listColor?: string;
   onToggle: (taskId: string) => void;
 }
 
-const TaskItem = ({ task, listColor, onToggle }: TaskItemProps) => {
+const TaskItem = ({ task, listColor = "hsl(var(--primary))", onToggle }: TaskItemProps) => {
   return (
     <div
       className={cn(
