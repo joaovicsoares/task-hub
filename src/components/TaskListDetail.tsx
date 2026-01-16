@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { TaskList, Task } from "@/types";
+import { TaskList } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import TaskItem from "./TaskItem";
 import ShareDialog from "./ShareDialog";
-import { ArrowLeft, Share2, Plus, Users, Loader2 } from "lucide-react";
-import { useTasks, useCreateTask, useUpdateTask, useDeleteTask } from "@/hooks/useTasks";
+import { ArrowLeft, Share2, Plus, Loader2 } from "lucide-react";
+import { useTasks, useCreateTask, useUpdateTask } from "@/hooks/useTasks";
 import { useShareList } from "@/hooks/useLists";
 
 interface TaskListDetailProps {
@@ -18,10 +18,9 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const [isShareOpen, setIsShareOpen] = useState(false);
 
   const { data: allTasks = [], isLoading } = useTasks();
-  const tasks = allTasks.filter((t) => t.listId === list.id);
+  const tasks = allTasks.filter((t) => t.listId === String(list.id));
   const createTask = useCreateTask();
   const updateTask = useUpdateTask();
-  const deleteTask = useDeleteTask();
   const shareList = useShareList();
 
   const handleToggleTask = (taskId: string) => {
@@ -36,13 +35,13 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
     if (!newTaskTitle.trim()) return;
 
     createTask.mutate(
-      { title: newTaskTitle.trim(), listId: list.id },
+      { title: newTaskTitle.trim(), listId: String(list.id) },
       { onSuccess: () => setNewTaskTitle("") }
     );
   };
 
   const handleShare = (email: string) => {
-    shareList.mutate({ listId: list.id, email });
+    shareList.mutate({ listId: String(list.id), email });
   };
 
   const completedTasks = tasks.filter((t) => t.completed).length;
@@ -82,28 +81,14 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
       {/* List Info */}
       <div className="mb-8">
         <div className="flex items-center gap-3 mb-2">
-          <div
-            className="w-4 h-4 rounded-full"
-            style={{ backgroundColor: list.color }}
-          />
-          <h1 className="text-3xl font-bold text-foreground">{list.title}</h1>
+          <div className="w-4 h-4 rounded-full bg-primary" />
+          <h1 className="text-3xl font-bold text-foreground">{list.nome}</h1>
         </div>
-        
-        {list.description && (
-          <p className="text-muted-foreground ml-7">{list.description}</p>
-        )}
 
         <div className="flex items-center gap-4 mt-4 ml-7">
           <span className="text-sm text-muted-foreground">
             {completedTasks} de {tasks.length} concluídas
           </span>
-          
-          {list.sharedWith.length > 0 && (
-            <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
-              <Users className="w-4 h-4" />
-              <span>Compartilhada com {list.sharedWith.length} pessoa(s)</span>
-            </div>
-          )}
         </div>
       </div>
 
@@ -147,7 +132,6 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
                 <TaskItem
                   key={task.id}
                   task={task}
-                  listColor={list.color}
                   onToggle={handleToggleTask}
                 />
               ))}
@@ -165,7 +149,6 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
                 <TaskItem
                   key={task.id}
                   task={task}
-                  listColor={list.color}
                   onToggle={handleToggleTask}
                 />
               ))}
@@ -186,7 +169,7 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
         onShare={handleShare}
-        sharedWith={list.sharedWith}
+        sharedWith={[]}
       />
     </div>
   );
