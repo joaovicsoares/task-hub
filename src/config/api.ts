@@ -1,11 +1,11 @@
 // API Configuration
 // Change this to your production URL when ready
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5038';
 
 export const API_ENDPOINTS = {
   // Auth
-  signup: '/signup',
-  login: '/login',
+  signup: 'api/auth/signup',
+  login: 'api/auth/login',
   
   // Lists
   lists: '/lists',
