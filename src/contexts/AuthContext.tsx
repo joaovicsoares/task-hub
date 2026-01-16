@@ -7,7 +7,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
-  signup: (email: string, password: string, username: string) => Promise<void>;
+  signup: ( nome: string, email: string, senha: string) => Promise<void>;
   logout: () => void;
 }
 
@@ -51,10 +51,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   }, [navigate]);
 
-  const signup = useCallback(async (email: string, password: string, username: string) => {
+  const signup = useCallback(async (nome: string, email: string, senha: string ) => {
     setIsLoading(true);
     try {
-      await authService.signup({ email, password, username });
+      await authService.signup({ nome, email, senha });
       setIsAuthenticated(true);
       toast.success('Conta criada com sucesso!');
       navigate('/dashboard');

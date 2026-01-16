@@ -21,7 +21,7 @@ const Signup = () => {
     }
     
     try {
-      await signup(email, password, username);
+      await signup(username, email, password );
     } catch {
       // Error is handled in AuthContext
     }

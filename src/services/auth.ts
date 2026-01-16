@@ -6,9 +6,9 @@ interface AuthResponse {
 }
 
 interface SignupData {
+  nome: string;
   email: string;
-  password: string;
-  username: string;
+  senha: string;
 }
 
 interface LoginData {
