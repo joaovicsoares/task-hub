@@ -13,8 +13,8 @@ interface UpdateTaskData {
 }
 
 export const tasksService = {
-  async getByListId(listId: string): Promise<Task[]> {
-    return apiClient.get<Task[]>(API_ENDPOINTS.tasksByList(listId));
+  async getAll(): Promise<Task[]> {
+    return apiClient.get<Task[]>(API_ENDPOINTS.tasks);
   },
 
   async create(data: CreateTaskData): Promise<Task> {

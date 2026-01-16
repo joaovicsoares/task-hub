@@ -14,8 +14,7 @@ export const API_ENDPOINTS = {
   // Tasks
   tasks: '/api/task',
   taskById: (id: string) => `/api/task/${id}`,
-  tasksByList: (listId: string) => `/lists/${listId}/tasks`,
   
   // Share
-  shareList: (listId: string) => `/lists/${listId}/share`,
+  shareList: '/api/sharelist',
 } as const;

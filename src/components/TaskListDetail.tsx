@@ -17,10 +17,11 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [isShareOpen, setIsShareOpen] = useState(false);
 
-  const { data: tasks = [], isLoading } = useTasks(list.id);
+  const { data: allTasks = [], isLoading } = useTasks();
+  const tasks = allTasks.filter((t) => t.listId === list.id);
   const createTask = useCreateTask();
-  const updateTask = useUpdateTask(list.id);
-  const deleteTask = useDeleteTask(list.id);
+  const updateTask = useUpdateTask();
+  const deleteTask = useDeleteTask();
   const shareList = useShareList();
 
   const handleToggleTask = (taskId: string) => {
