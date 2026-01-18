@@ -35,7 +35,7 @@ const TaskListDetail = ({ list, onBack }: TaskListDetailProps) => {
     if (!newTaskTitle.trim()) return;
 
     createTask.mutate(
-      { title: newTaskTitle.trim(), listId: String(list.id) },
+      { titulo: newTaskTitle.trim(), idLista: String(list.id) },
       { onSuccess: () => setNewTaskTitle("") }
     );
   };
