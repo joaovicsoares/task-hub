@@ -22,8 +22,8 @@ export const useCreateTask = () => {
 
   return useMutation({
     mutationFn: tasksService.create,
-    onSuccess: (_, { listId }) => {
-      queryClient.invalidateQueries({ queryKey: ['tasks', listId] });
+    onSuccess: (_, { idLista }) => {
+      queryClient.invalidateQueries({ queryKey: ['tasks', idLista] });
       queryClient.invalidateQueries({ queryKey: ['lists'] });
       toast.success('Tarefa criada!');
     },

@@ -3,8 +3,8 @@ import { API_ENDPOINTS } from '@/config/api';
 import { Task } from '@/types';
 
 interface CreateTaskData {
-  title: string;
-  listId: string;
+  titulo: string;
+  idLista: string;
 }
 
 interface UpdateTaskData {
