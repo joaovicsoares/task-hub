@@ -25,7 +25,8 @@ const TaskListCard = ({ list, onClick }: TaskListCardProps) => {
     e.stopPropagation();
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = (e: React.MouseEvent) => {
+    e.stopPropagation();
     deleteList.mutate(String(list.id));
   };
 
