@@ -38,6 +38,6 @@ export const listsService = {
   },
 
   async share(listId: string, data: ShareListData): Promise<void> {
-    return apiClient.post(API_ENDPOINTS.shareList, { listId, ...data });
+    return apiClient.post(API_ENDPOINTS.shareList, { idLista: listId, Email: data.email });
   },
 };
